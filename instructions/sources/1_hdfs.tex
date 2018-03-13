@@ -1,0 +1,121 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+
+\pagenumbering{gobble}
+
+\lstset{
+	language=bash,
+	frame=single,
+	columns=fullflexible
+	}
+
+\begin{document}
+\section*{Hdfs}
+
+Przydatne komendy hdfs:
+\begin{enumerate}
+\item ls - listuje katalog
+\begin{lstlisting}
+hdfs dfs -ls <path>
+hdfs dfs -ls /user/xyz
+\end{lstlisting}
+
+\item cat - wypisuje zawartość pliku
+\begin{lstlisting}
+hdfs dfs -cat <path>
+hdfs dfs -cat /user/xyz/file.txt
+\end{lstlisting}
+
+\item mkdir - tworzy katalog
+\begin{lstlisting}
+hdfs dfs -mkdir <path>
+hdfs dfs -mkdir /user/xyz/subdir
+\end{lstlisting}
+ 
+\item rm - usuwa plik
+\begin{lstlisting}
+hdfs dfs -rm <path>
+hdfs dfs -rm /user/xyz/file.txt
+\end{lstlisting}
+
+\item chmod - zmienia prawa dostępu do pliku
+\begin{lstlisting}
+hdfs dfs -chmod <mode> <path>
+hdfs dfs -chmod 640 /user/xyz/file.txt
+\end{lstlisting}
+
+\item chown - zmienia właściciela pliku
+\begin{lstlisting}
+hdfs dfs -chown <owner>:<group> <path>
+hdfs dfs -chown xyz:xyz /user/xyz/file.txt
+\end{lstlisting}
+
+\item cp - kopiuje plik na hdfsie
+\begin{lstlisting}
+hdfs dfs -cp <source> <target>
+hdfs dfs -cp /user/xyz/file /user/xyz/file.copy
+\end{lstlisting}
+
+\item mv - przenosi plik na hdfsie
+\begin{lstlisting}
+hdfs dfs -mv <source> <target>
+hdfs dfs -mv /user/xyz/file /user/xyz/file.new
+\end{lstlisting}
+
+\item put - umieszka lokalny plik na hdfsie
+\begin{lstlisting}
+hdfs dfs -put <local_path> <hdfs_path>
+hdfs dfs -put file.txt /user/xyz
+\end{lstlisting}
+
+\item get - pobiera plik z hdfsa
+\begin{lstlisting}
+hdfs dfs -get <hdfs_path> <local_path>
+hdfs dfs -get /user/xyz/file.txt .
+\end{lstlisting}
+
+\item touchz - tworzy pusty plik
+\begin{lstlisting}
+hdfs dfs -touchz <path>
+hdfs dfs -touchz /usr/xyz/file.txt
+\end{lstlisting}
+
+\item appendToFile - przepisuje plik do końca pliku na hdfsie
+\begin{lstlisting}
+hdfs dfs -appendToFile <local_path> <hdfs_path>
+hdfs dfs -appendToFile abc.txt /user/xyz/file.txt
+\end{lstlisting}
+
+\end{enumerate}
+
+Jeżeli klaster nie jest zabezpieczony kerberosem, to możemy wykorzystać zmienną środowiskową HADOOP\_USER\_NAME, żeby ustawić użytkownika z którego wykonane zostanie polecenie, np.
+\begin{lstlisting}
+HADOOP_USER_NAME=hdfs hdfs dfs -mkdir /katalog
+\end{lstlisting}
+Odpowiednikiem linuxowego roota na hdfsie jest użytkownik 'hdfs'
+\\*
+\\*
+\\*
+Zadania:
+\begin{enumerate}
+	\item Utwórz katalogi z prawami dostępu:\\*
+
+\begin{tabular}{c | c | c | c}
+	ścieżka & user & grupa & prawa dostępu \\ \hline 
+	/user/<login> & <login> & <login> & 755 \\
+	/user/<login>/inputs & <login> & <login> & 755 \\
+	/user/<login>/outputs & <login> & <login> & 755 \\
+	/user/<login>/alien & <login> & <login> & 755 \\
+\end{tabular}
+
+\item wrzuć pliki dump.sql, loremipsum i transaction\_logs do /user/<login>/inputs
+\item zmień prawa do odczytu do katalogu /user/<login>/alien tak, żeby tylko 'alien' mógł odczytać jego zawartość
+\item spróbuj odczytać ww. katalog jako user ’<login>’
+\item spróbuj odczytać ww. katalog jako user ’hdfs’
+\end{enumerate}
+
+\end{document}
