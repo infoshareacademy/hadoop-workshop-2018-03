@@ -1,0 +1,42 @@
+\documentclass{article}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+
+\pagenumbering{gobble}
+\lstset{
+	language=bash,
+	frame=single,
+	basicstyle=\tiny,
+	columns=fullflexible
+	}
+	
+\begin{document}
+\section*{Mapreduce}
+
+Uruchomienie joba mapreduce:
+\begin{enumerate}
+\item Zbuduj jara i wrzuć na maszynę vm-cluster-node2
+\item Zaloguj się na vm-cluster-node2
+\item uruchomienie joba
+	\begin{lstlisting}[]
+hadoop jar <sciezka_do_jara> <pakiet.Klasa> <katalog_wejsciowy> <katalog_wyjsciowy>
+hadoop jar mapreduce-jobs-1.0-SNAPSHOT.jar pl.isa.hadoop.WordCount /user/xyz/loremipsum /user/xyz/outputs/output-1
+\end{lstlisting}
+
+Uwaga: Żeby polecenie się wykonało <katalog\_wyjsciowy> nie może istnieć!
+\end{enumerate}
+
+Zadania:
+\begin{enumerate}
+\item policz literki w tekscie loremipsum
+\item posortuj policzone literki po ilości wystąpień
+\item posumuj kwotę z pliku 'transfers' pogrupowaną po rachunku źródłowym
+\item posortuj przelewy po kwocie korzystając z wielu reduerów. Napisz Partitioner, który odpowiednio przydzieli przelew do reducera. Możesz założyć, że kwota przelewu to liczba z przedzialu <1, 1000000>
+\item połącz posumowane przelewy z danymi klientów z pliku 'clients'. Warto skorzystać z klasy MultipleInputs
+\end{enumerate}
+
+\end{document}
