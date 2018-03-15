@@ -1,0 +1,43 @@
+\documentclass{article}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+
+\pagenumbering{gobble}
+\lstset{
+	language=bash,
+	frame=single,
+	basicstyle=\tiny,
+	columns=fullflexible
+	}
+	
+\begin{document}
+\section*{Hadoop streaming}
+
+Uruchomienie joba hadoop streaming:
+\begin{enumerate}
+\item skopiuj skrypty mapper.py i reducer.py na vm-cluster-node2
+\item Zaloguj się na vm-cluster-node2
+\item uruchomienie joba
+\begin{lstlisting}[]
+hadoop jar <sciezka_do_jara_hadoop_streaming> -files <lista_plikow_z_mapperem_i_reducerem> \
+  -mapper <plik_z_mapperem> -reducer <plik_z_reducerem> -input <katalog_wejsciowy> -output <katalog_wyjsciowy>
+
+hadoop jar /opt/cloudera/parcels/CDH/jars/hadoop-streaming-2.6.0-cdh5.14.0.jar -files mapper.py,reducer.py \
+  -mapper mapper.py -reducer reducer.py -input /user/xyz/loremipsum -output /user/xyz/outputs/output-2
+\end{lstlisting}
+
+Uwaga: Żeby polecenie się wykonało <katalog\_wyjsciowy> nie może istnieć!
+\end{enumerate}
+
+Zadania:
+\begin{enumerate}
+\item policz literki w tekscie loremipsum
+\item posortuj policzone literki po ilości wystąpień
+\item Zadanie dodatkowe: napisz mapper i reducer w C\# i użyj w jobie hadoop streaming 
+\end{enumerate}
+
+\end{document}
