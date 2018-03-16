@@ -33,11 +33,34 @@ hadoop jar /opt/cloudera/parcels/CDH/jars/hadoop-streaming-2.6.0-cdh5.14.0.jar -
 Uwaga: Żeby polecenie się wykonało <katalog\_wyjsciowy> nie może istnieć!
 \end{enumerate}
 
-Zadania:
+\subsection*{Zadania}
+
 \begin{enumerate}
 \item policz literki w tekscie loremipsum
-\item posortuj policzone literki po ilości wystąpień
+\item posortuj policzone literki po ilości wystąpień. Dlaczego jest to trudniejsze niż przy wykorzystaniu javovego api?
+\item dla każdego konta policz ile było unikalnych numerów kont, z których wysłano przelewy na to konto
+\item policz ile było unikalnych numerów kont w ogóle
 \item Zadanie dodatkowe: napisz mapper i reducer w C\# i użyj w jobie hadoop streaming 
 \end{enumerate}
+
+\subsection*{Przydatne parametry}
+
+Włączenie kompresji:
+\begin{lstlisting}
+-D mapreduce.output.fileoutputformat.compress=true \
+  -D mapreduce.output.fileoutputformat.compress.codec=org.apache.hadoop.io.compress.GzipCodec
+\end{lstlisting} 
+Użycie innego input formatu:
+\begin{lstlisting}
+-inputformat org.apache.hadoop.mapred.SequenceFileInputFormat
+\end{lstlisting}
+Użycie innego output formatu:
+\begin{lstlisting}
+-outputformat org.apache.hadoop.mapred.SequenceFileOutputFormat
+\end{lstlisting}
+Identity mapper:
+\begin{lstlisting}
+-mapper org.apache.hadoop.mapred.lib.IdentityMapper
+\end{lstlisting}
 
 \end{document}

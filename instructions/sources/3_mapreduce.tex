@@ -21,8 +21,8 @@ Uruchomienie joba mapreduce:
 \begin{enumerate}
 \item Zbuduj jara i wrzuć na maszynę vm-cluster-node2
 \item Zaloguj się na vm-cluster-node2
-\item uruchomienie joba
-	\begin{lstlisting}[]
+\item uruchomienie joba:
+\begin{lstlisting}
 hadoop jar <sciezka_do_jara> <pakiet.Klasa> <katalog_wejsciowy> <katalog_wyjsciowy>
 hadoop jar mapreduce-jobs-1.0-SNAPSHOT.jar pl.isa.hadoop.WordCount /user/xyz/loremipsum /user/xyz/outputs/output-1
 \end{lstlisting}
@@ -30,13 +30,18 @@ hadoop jar mapreduce-jobs-1.0-SNAPSHOT.jar pl.isa.hadoop.WordCount /user/xyz/lor
 Uwaga: Żeby polecenie się wykonało <katalog\_wyjsciowy> nie może istnieć!
 \end{enumerate}
 
-Zadania:
+\subsection*{Zadania}
+
 \begin{enumerate}
 \item policz literki w tekscie loremipsum
 \item posortuj policzone literki po ilości wystąpień
 \item posumuj kwotę z pliku 'transfers' pogrupowaną po rachunku źródłowym
 \item posortuj przelewy po kwocie korzystając z wielu reduerów. Napisz Partitioner, który odpowiednio przydzieli przelew do reducera. Możesz założyć, że kwota przelewu to liczba z przedzialu <1, 1000000>
-\item połącz posumowane przelewy z danymi klientów z pliku 'clients'. Warto skorzystać z klasy MultipleInputs
+\item zbuduj indeks odwócony (słowo -> lista plików w których się znajduje) z danych w katalogu 'articles'. Nazwę pliku można wydobyć za pomocą:
+\begin{lstlisting}
+((FileSplit) context.getInputSplit()).getPath().getName();
+\end{lstlisting}
+\item połącz posumowane przelewy z danymi klientów z pliku 'clients'. Warto skorzystać z klasy MultipleInputs (reduce side join), lub DistributedCache (map side join)
 \end{enumerate}
 
 \end{document}
