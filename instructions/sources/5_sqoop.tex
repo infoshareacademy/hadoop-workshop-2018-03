@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+
+\pagenumbering{gobble}
+\lstset{
+	language=bash,
+	frame=single,
+	basicstyle=\tiny,
+	columns=fullflexible
+	}
+	
+\begin{document}
+\section*{Sqoop}
+
+\begin{enumerate}
+\item ściągnij mysql-connector https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-java-5.1.46.tar.gz
+\item rozpakuj 'tar -xf mysql-connector-java-5.1.46.tar.gz'
+\item W rozpakowanym archiwum znajdź plik 'mysql-connector-java-5.1.46-bin.jar' i wrzuć na vm-cluster-node2 do katalogu /var/lib/sqoop
+\item na vm-cluster-node2 uruchom import tabeli account\_owners:
+\begin{lstlisting}
+sqoop import --connect <connect_string> --username <username> --password <password> \
+  --table <table> -m <mappers_count> --target-dir <target_dir>
+sqoop import --connect jdbc:mysql://vm-cluster-node1:3306/sqoop --username sqoop --password sqoop_pwd \
+  --table account_owners -m 1 --target-dir /user/xyz/account_owners
+\end{lstlisting}
+\item wyeksportuj transfery do tabeli w mysqlu:
+\begin{lstlisting}
+sqoop export --connect <connect_string> --username <username> --password <password> \
+  --table <table> -m <mappers_count> --export-dir <export_dir>
+\end{lstlisting}
+\end{enumerate}
+
+
+\end{document}
