@@ -1,0 +1,35 @@
+\documentclass{article}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+
+\pagenumbering{gobble}
+\lstset{
+	language=sql,
+	frame=single,
+	basicstyle=\tiny,
+	literate=*{-}{-}1,
+	columns=fullflexible
+	}
+	
+\begin{document}
+\section*{Hive UDF}
+
+Wrzucenie i uruchomienie udfa:
+\begin{lstlisting}
+add jar hdfs:///user/vagrant/hive-udfs-1.0-SNAPSHOT.jar;
+create function hello AS 'pl.isa.hadoop.HelloWorldUdf';
+select hello(source) from transfers limit 10;
+\end{lstlisting}
+
+\subsection*{Zadania}
+
+\begin{enumerate}
+\item napisz udfa, który przekonwertuje złotówki na dolary
+\end{enumerate}
+
+
+\end{document}

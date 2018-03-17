@@ -18,10 +18,26 @@
 \begin{document}
 \section*{Hive}
 
-Beeline:
+Dokumentacja Hive:
+\\*
+https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML
+\\*
+\\*
+Połączenie beeline:
 \begin{lstlisting}
-beeline
+!connect jdbc:hive2://<host>:<port>/<baza> <user> <haslo>
 !connect jdbc:hive2://vm-cluster-node1:10000 vagrant vagrant
+!connect jdbc:hive2://vm-cluster-node1:10000/xyz vagrant vagrant
+\end{lstlisting}
+
+Utworzenie bazy
+\begin{lstlisting}
+create database xyz;
+\end{lstlisting}
+
+Przełączenie bazy
+\begin{lstlisting}
+use xyz;
 \end{lstlisting}
 
 Utworzenie tabeli i załadowanie danych:
@@ -53,9 +69,14 @@ CREATE TABLE transfers2(
 	LOCATION '/user/xyz/transfers_table';
 \end{lstlisting}
 
+Utworzenie tabeli external:
+\begin{lstlisting}
+CREATE EXTERNAL TABLE transfers3 <reszta_polecenia>;
+\end{lstlisting}
+
 Zmiana delimitera:
 \begin{lstlisting}
-create table transfers3
+create table transfers4
 row format delimited
 fields terminated by ';'
 as select * from transfers;
@@ -63,17 +84,9 @@ as select * from transfers;
 
 Zmiana formatu danych:
 \begin{lstlisting}
-create table transfers8
+create table transfers5
 stored as orc
 as select * from transfers;
-\end{lstlisting}
-
-Wrzucenie i uruchomienie udfa:
-\begin{lstlisting}
-add jar hdfs:///user/vagrant/hive-udfs-1.0-SNAPSHOT.jar;
-create function hello AS 'pl.isa.hadoop.HelloWorldUdf';
-select hello(source) from transfers limit 10;
-drop function hello;
 \end{lstlisting}
 
 Włączenie kompresji:
@@ -84,5 +97,29 @@ set mapreduce.output.fileoutputformat.compress.codec=org.apache.hadoop.io.compre
 set mapreduce.output.fileoutputformat.compress.type=BLOCK;
 \end{lstlisting}
 
+Odblokowanie dynamicznego wyznaczania partycji:
+\begin{lstlisting}
+SET hive.exec.dynamic.partition=true;
+\end{lstlisting}
+
+Wyświetlenie danych na temat tabeli:
+\begin{lstlisting}
+show create table transfers;
+\end{lstlisting}
+
+\subsection*{Zadania}
+
+\begin{enumerate}
+\item Utwórz bazę <login> i używaj jej przy dalszych poleceniach.
+\item Utwórz tabelę transfers. Wrzuć do niej dane z pliku transfers.
+\item Utwórz tabelę typu ‘external’ I załaduj do niej takie same dane.
+\item Zdropuj obie tabele i zobacz co stało się z danymi na hdfsie.
+\item Utwórz tabelę w formacie ORC. Spróbuj poleceniem ‘hdfs dfs -cat ...’ wypisać zawartość plików i zobacz, że są binarne.
+\item Posumuj pole 'amount' po koncie źródłowym.
+\item Utwórz tabelę 'owners' z logów załadowanych sqoopem
+\item Utwórz tabelę 'named\_transfers' będącą wynikiem zjoinowania tabel 'owners' i 'transfers', tzn zamiast src i dst będzie zawierać pola from i to w których beda imiona.
+\item Utwórz tabelę partycjonowaną po id konta źródłowego.
+\item Utwórz tabelę partycjonowaną po dacie z katalogów, które wrzucił Flume.
+\end{enumerate}
 
 \end{document}
