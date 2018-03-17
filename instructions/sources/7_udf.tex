@@ -18,17 +18,45 @@
 \begin{document}
 \section*{Hive UDF}
 
+\begin{tabular}{c | c }
+	UDF & przyjmuje wartości z 1 wiersza i zwraca wartość lub strukturę \\
+	UDAF & Funkcja agregująca. Przyjmuje wartości z wielu wierszy i zwraca wartość lub strukturę \\
+	UDTF & Funkcja tabelaryczna. Przyjmuje wartości z 1 wiersza i może zwrócić więcej niż 1 'wiersz' \\
+\end{tabular}
+
+\bigskip
+
+
 Wrzucenie i uruchomienie udfa:
 \begin{lstlisting}
 add jar hdfs:///user/vagrant/hive-udfs-1.0-SNAPSHOT.jar;
 create function hello AS 'pl.isa.hadoop.HelloWorldUdf';
-select hello(source) from transfers limit 10;
+select hello(src) from transfers limit 10;
 \end{lstlisting}
 
 \subsection*{Zadania}
 
 \begin{enumerate}
 \item napisz udfa, który przekonwertuje złotówki na dolary
+\item napisz udfa, który przyjmie i połączy po przecinku dowolną ilość prymitywnych parametrów
+\item napisz udafa, który z tabeli transfers wygeneruje tabelę zysków i strat
+\\*
+\begin{tabular}{c | c | c }
+	src & dst & amount \\ \hline 
+	a & b & 5 \\
+	a & c & 10 \\
+	b & d & 15 \\
+\end{tabular}
+->
+\begin{tabular}{c | c}
+	account & amount \\ \hline 
+	a & -5 \\
+	a & -10 \\
+	b & 5 \\
+	b & -15 \\
+	c & 10 \\
+	d & 15 \\
+\end{tabular}
 \end{enumerate}
 
 
