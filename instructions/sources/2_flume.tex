@@ -1,0 +1,70 @@
+\documentclass{article}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+
+\pagenumbering{gobble}
+\lstset{
+	language=bash,
+	frame=single,
+	basicstyle=\tiny,
+	literate=*{-}{-}1,
+	columns=fullflexible
+	}
+
+\begin{document}
+\section*{Flume}
+
+Instalacja flume:
+\begin{enumerate}
+\item zaloguj się w cloudera managerze (admin / admin)
+\item 'Flume-<twoj\_numer>', a następnie wejdź w zakładkę 'Configuration'
+\item ustaw w polu 'HTTP Port' wartość 414<twoj\_numer>
+\item Przekopiuj poniższą do pola 'Configuration File'
+\begin{lstlisting}
+tier1.sources  = source1
+tier1.channels = channel1
+tier1.sinks    = sink1
+
+tier1.sources.source1.type     = netcat
+tier1.sources.source1.bind     = 0.0.0.0
+tier1.sources.source1.port     = 99<twoj_numer>
+tier1.sources.source1.channels = channel1
+tier1.sources.source1.interceptors = i1 i2
+tier1.sources.source1.interceptors.i1.type = org.apache.flume.interceptor.TimestampInterceptor$Builder
+tier1.sources.source1.interceptors.i2.type = pl.isa.hadoop.LoggingInterceptor$Builder
+tier1.sources.source1.interceptors.i2.logPrefix = LogPrefix
+tier1.channels.channel1.type   = memory
+
+
+tier1.sinks.sink1.type = hdfs
+tier1.sinks.sink1.channel = channel1
+tier1.sinks.sink1.hdfs.path = /user/<login>/events/log_time=%y%m%d-%H%M
+tier1.sinks.sink1.hdfs.filePrefix = events-
+tier1.sinks.sink1.hdfs.fileType = DataStream
+tier1.sinks.sink1.hdfs.writeFormat = Text
+
+
+tier1.channels.channel1.capacity = 100
+\end{lstlisting}
+\item Dodaj do 'Plugin directories' wartość '/home/<login>/flume.plugins.d'
+\item Kliknij 'save changes'
+\item Utwórz na vm-cluster-node2 katalog '/home/<login>/flume.plugins.d/interceptors/lib' i wrzuć do niego zbudowanego jara z interceptorami.
+\item Kliknij u góry na 'Actions'
+\item Kliknij akcję 'Start'
+\item uruchom generator transferów './generator.py vm-cluster-node2 99<twoj\_numer>'
+\item wylistuj katalog na hdfsie /user/<login>/events i zobacz czy pojawiają się logi transferów
+\end{enumerate}
+
+\pagebreak
+
+Zadania:
+\begin{enumerate}
+\item Napisz interceptor, który odfiltruje przlewy na kwotę poniżej 200000, a pozostałe przepuści.
+\item Zasymuluj opóźnienia w systemie dostarczania logów i zacznij generować przedwczorajsze logi poleceniem: './generator.py vm-cluster-node2 9999 2'. Napisz interceptor, który odkoduje datę z linijki loga i ustawi odpowiedni timestamp w nagłówku. Do parsowania daty możesz skorzystać z klasy SimpleDateFormat. Sparsowana data ma metodę getTime(), która zwróci odpowiedni timestap, który należy ustawić w nagłówku "timestamp".
+\end{enumerate}
+
+\end{document}
