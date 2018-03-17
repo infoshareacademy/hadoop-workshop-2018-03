@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 
-from time import gmtime, strftime, sleep
-
+from time import sleep
+from datetime import datetime, timedelta
 import fileinput
 import random
 import socket
@@ -10,6 +10,7 @@ import sys
 accounts = [line.strip() for line in fileinput.input('accounts')]
 host = sys.argv[1]
 port = int(sys.argv[2])
+minus_days = int(sys.argv[3]) if len(sys.argv) >= 4 else 0
 
 def generate_random_transfer():
     src = random.choice(accounts)
@@ -17,7 +18,7 @@ def generate_random_transfer():
     
     amount = random.randint(1, 1000000)
 
-    date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    date = (datetime.today() - timedelta(days=minus_days)).isoformat(' ')
 
     return '{},{},{},{}\n'.format(src, dst, amount, date)
 
