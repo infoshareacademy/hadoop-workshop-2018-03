@@ -1,0 +1,88 @@
+\documentclass{article}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage[polish]{babel}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+
+\pagenumbering{gobble}
+\lstset{
+	language=sql,
+	frame=single,
+	basicstyle=\tiny,
+	literate=*{-}{-}1,
+	columns=fullflexible
+	}
+	
+\begin{document}
+\section*{Hive}
+
+Beeline:
+\begin{lstlisting}
+beeline
+!connect jdbc:hive2://vm-cluster-node1:10000 vagrant vagrant
+\end{lstlisting}
+
+Utworzenie tabeli i załadowanie danych:
+\begin{lstlisting}
+CREATE TABLE transfers(
+		src STRING,
+		dst STRING,
+		amount INT,
+		date STRING
+	)
+	ROW FORMAT DELIMITED
+	FIELDS TERMINATED BY ','
+	STORED AS TEXTFILE;
+
+LOAD DATA INPATH '/user/vagrant/transfers' INTO TABLE transfers;
+\end{lstlisting}
+
+Utworzenie tabeli w konkretnej lokalizacji (która może już istnieć):
+\begin{lstlisting}
+CREATE TABLE transfers2(
+		src STRING,
+		dst STRING,
+		amount INT,
+		date STRING
+	)
+	ROW FORMAT DELIMITED
+	FIELDS TERMINATED BY ','
+	STORED AS TEXTFILE
+	LOCATION '/user/xyz/transfers_table';
+\end{lstlisting}
+
+Zmiana delimitera:
+\begin{lstlisting}
+create table transfers3
+row format delimited
+fields terminated by ';'
+as select * from transfers;
+\end{lstlisting}
+
+Zmiana formatu danych:
+\begin{lstlisting}
+create table transfers8
+stored as orc
+as select * from transfers;
+\end{lstlisting}
+
+Wrzucenie i uruchomienie udfa:
+\begin{lstlisting}
+add jar hdfs:///user/vagrant/hive-udfs-1.0-SNAPSHOT.jar;
+create function hello AS 'pl.isa.hadoop.HelloWorldUdf';
+select hello(source) from transfers limit 10;
+drop function hello;
+\end{lstlisting}
+
+Włączenie kompresji:
+\begin{lstlisting}
+set hive.exec.compress.output=true;
+set mapreduce.output.fileoutputformat.compress=true;
+set mapreduce.output.fileoutputformat.compress.codec=org.apache.hadoop.io.compress.GzipCodec;
+set mapreduce.output.fileoutputformat.compress.type=BLOCK;
+\end{lstlisting}
+
+
+\end{document}
