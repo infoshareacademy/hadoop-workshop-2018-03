@@ -5,6 +5,7 @@
 \usepackage[polish]{babel}
 \usepackage{listings}
 \usepackage[T1]{fontenc}
+\usepackage{hyperref}
 
 \pagenumbering{gobble}
 \lstset{
@@ -20,8 +21,8 @@
 
 Uruchomienie joba hadoop streaming:
 \begin{enumerate}
-\item skopiuj skrypty mapper.py i reducer.py na vm-cluster-node2
-\item Zaloguj się na vm-cluster-node2
+\item skopiuj skrypty mapper.py i reducer.py na adminsk01
+\item Zaloguj się na adminsk01
 \item uruchomienie joba
 \begin{lstlisting}[]
 hadoop jar <sciezka_do_jara_hadoop_streaming> -files <lista_plikow_z_mapperem_i_reducerem> \
@@ -63,5 +64,9 @@ Identity mapper:
 \begin{lstlisting}
 -mapper org.apache.hadoop.mapred.lib.IdentityMapper
 \end{lstlisting}
+
+Dokumentacja:
+\\*
+\url{https://hadoop.apache.org/docs/r1.2.1/streaming.html}
 
 \end{document}
