@@ -62,6 +62,8 @@ hdfs dfs -cp <source> <target>
 hdfs dfs -cp /user/xyz/file /user/xyz/file.copy
 \end{lstlisting}
 
+\pagebreak
+
 \item mv - przenosi plik na hdfsie
 \begin{lstlisting}
 hdfs dfs -mv <source> <target>
@@ -99,12 +101,14 @@ Jeżeli klaster nie jest zabezpieczony kerberosem, to możemy wykorzystać zmien
 HADOOP_USER_NAME=hdfs hdfs dfs -mkdir /katalog
 \end{lstlisting}
 Odpowiednikiem linuxowego roota na hdfsie jest użytkownik 'hdfs'
-\\*
-\\*
-\\*
-Zadania:
+
+\pagebreak
+
+\subsection*{Zadania}
+
 \begin{enumerate}
-	\item Utwórz katalogi z prawami dostępu:\\*
+\item na hostach adminsk0[1-4] załóż sobie usera i katalog domowy
+\item Utwórz na hdfsie katalogi z prawami dostępu:\\*
 
 \begin{tabular}{c | c | c | c}
 	ścieżka & user & grupa & prawa dostępu \\ \hline 
@@ -114,7 +118,7 @@ Zadania:
 	/user/<login>/alien & <login> & <login> & 755 \\
 \end{tabular}
 
-\item wrzuć pliki dump.sql, loremipsum i transaction\_logs do /user/<login>/inputs
+\item wrzuć pliki loremipsum i transaction\_logs do /user/<login>/inputs
 \item zmień prawa do odczytu do katalogu /user/<login>/alien tak, żeby tylko 'alien' mógł odczytać jego zawartość
 \item spróbuj odczytać ww. katalog jako user ’<login>’
 \item spróbuj odczytać ww. katalog jako user ’hdfs’
