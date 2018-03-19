@@ -21,17 +21,17 @@
 \begin{enumerate}
 \item ściągnij mysql-connector https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-java-5.1.46.tar.gz
 \item rozpakuj 'tar -xf mysql-connector-java-5.1.46.tar.gz'
-\item W rozpakowanym archiwum znajdź plik 'mysql-connector-java-5.1.46-bin.jar' i wrzuć na vm-cluster-node2 do katalogu /var/lib/sqoop
-\item na vm-cluster-node2 uruchom import tabeli account\_owners:
+\item W rozpakowanym archiwum znajdź plik 'mysql-connector-java-5.1.46-bin.jar' i wrzuć na adminsk01 do katalogu /var/lib/sqoop
+\item na adminsk01 uruchom import tabeli account\_owners z bazy na adminsk02:
 \begin{lstlisting}
 sqoop import --connect <connect_string> --username <username> --password <password> \
   --table <table> -m <mappers_count> --target-dir <target_dir>
 sqoop import --connect jdbc:mysql://vm-cluster-node1:3306/sqoop --username sqoop --password sqoop_pwd \
   --table account_owners -m 1 --target-dir /user/xyz/account_owners
 \end{lstlisting}
-\item Utwórz w mysqlu na vm-cluster-node1 tabelę '<username>\_transfers':
+\item Utwórz w mysqlu na adminsk02 tabelę '<username>\_transfers':
 \begin{lstlisting}
-mysql -u root --password=root
+mysql -u root
 use sqoop
 CREATE TABLE xyz_transfers (src varchar(255) DEFAULT NULL, dst varchar(255) DEFAULT NULL, \
   amount varchar(255) DEFAULT NULL, execution_date varchar(255));
@@ -44,6 +44,5 @@ sqoop export --connect jdbc:mysql://vm-cluster-node1:3306/sqoop --username sqoop
   --table xyz_transfers -m 1 --export-dir /user/xyz/transfers
 \end{lstlisting}
 \end{enumerate}
-
 
 \end{document}
