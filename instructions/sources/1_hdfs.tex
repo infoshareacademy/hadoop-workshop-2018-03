@@ -116,9 +116,10 @@ Odpowiednikiem linuxowego roota na hdfsie jest użytkownik 'hdfs'
 	/user/<login>/inputs & <login> & <login> & 755 \\
 	/user/<login>/outputs & <login> & <login> & 755 \\
 	/user/<login>/alien & <login> & <login> & 755 \\
+	/user/<login>/events & flume & flume & 755 \\
 \end{tabular}
 
-\item wrzuć pliki loremipsum i transaction\_logs do /user/<login>/inputs
+\item wrzuć pliki loremipsum i transfers do /user/<login>/inputs
 \item zmień prawa do odczytu do katalogu /user/<login>/alien tak, żeby tylko 'alien' mógł odczytać jego zawartość
 \item spróbuj odczytać ww. katalog jako user ’<login>’
 \item spróbuj odczytać ww. katalog jako user ’hdfs’
