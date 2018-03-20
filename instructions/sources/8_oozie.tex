@@ -3,8 +3,19 @@
 \usepackage{polski}
 \usepackage[polish]{babel}
 
-\begin{document}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+
 \pagenumbering{gobble}
+\lstset{
+	language=sql,
+	frame=single,
+	basicstyle=\tiny,
+	literate=*{-}{-}1,
+	columns=fullflexible
+	}
+
+\begin{document}
 \section*{Oozie}
 
 \subsection*{Hadoop Streaming}
@@ -60,6 +71,11 @@
 \item Wybierz zakres dat w jakim scheduler ma się wykonywać
 \item kliknij save, żeby zapisać koordynatora
 \end{enumerate}
+
+\subsection*{Dodanie parametru do joba}
+\begin{lstlisting}
+${nazwa_parametru}
+\end{lstlisting}
 
 \pagebreak
 \subsection*{Zadania}
