@@ -20,10 +20,10 @@
 
 Instalacja flume:
 \begin{enumerate}
-\item zaloguj się w cloudera managerze (admin / admin)
-\item 'Flume-<twoj\_numer>', a następnie wejdź w zakładkę 'Configuration'
-\item ustaw w polu 'HTTP Port' wartość 414<twoj\_numer>
-\item Przekopiuj poniższą konfigurację do pola 'Configuration File'
+\item utwórz na hdfsie katalog /user/<login>/events, którego właścicielem będzie user flume
+\item zaloguj się w cloudera managerze adminsk02:7180 (admin / admin)
+\item Kliknij w usługę 'Flume-<twoj\_numer>', a następnie wejdź w zakładkę 'Configuration'
+\item Przekopiuj poniższą konfigurację do pola 'Configuration File' uzupełniając odpowiednie pola
 \begin{lstlisting}
 tier1.sources  = source1
 tier1.channels = channel1
@@ -52,10 +52,10 @@ tier1.channels.channel1.capacity = 100
 \end{lstlisting}
 \item Dodaj do 'Plugin directories' wartość '/home/<login>/flume.plugins.d'
 \item Kliknij 'save changes'
-\item Utwórz na vm-cluster-node2 katalog '/home/<login>/flume.plugins.d/interceptors/lib' i wrzuć do niego zbudowanego jara z interceptorami.
+\item Znajdź na cloudera managerze maszynę na której działa flume. Utwórz na niej katalog '/home/<login>/flume.plugins.d/interceptors/lib' i wrzuć do niego zbudowanego jara z interceptorami.
 \item Kliknij u góry na 'Actions'
 \item Kliknij akcję 'Start'
-\item uruchom generator transferów './generator.py adminsk01... 99<twoj\_numer>'
+\item uruchom generator transferów './generator.py <adres\_ip\_maszyny\_z\_flumem> 99<twoj\_numer>'
 \item wylistuj katalog na hdfsie /user/<login>/events i zobacz czy pojawiają się logi transferów
 \end{enumerate}
 
@@ -64,7 +64,7 @@ tier1.channels.channel1.capacity = 100
 Zadania:
 \begin{enumerate}
 \item Napisz interceptor, który odfiltruje przlewy na kwotę poniżej 200000, a pozostałe przepuści.
-\item Zasymuluj opóźnienia w systemie dostarczania logów i zacznij generować przedwczorajsze logi poleceniem: './generator.py adminsk01... 9999 2'. Napisz interceptor, który odkoduje datę z linijki loga i ustawi odpowiedni timestamp w nagłówku. Do parsowania daty możesz skorzystać z klasy SimpleDateFormat. Sparsowana data ma metodę getTime(), która zwróci odpowiedni timestap, który należy ustawić w nagłówku "timestamp".
+\item Zasymuluj opóźnienia w systemie dostarczania logów i zacznij generować przedwczorajsze logi poleceniem: './generator.py <adres\_ip\_maszyny\_z\_flumem> 99<twoj\_numer> 2'. Eventy zaczną trafiać pod nieprawidłowy log\_time. Napisz interceptor, który odkoduje datę z linijki loga i ustawi odpowiedni timestamp w nagłówku. Do parsowania daty możesz skorzystać z klasy SimpleDateFormat. Sparsowana data ma metodę getTime(). Zwraca ona timestamp, który należy ustawić w nagłówku "timestamp".
 \end{enumerate}
 
 \end{document}
