@@ -8,16 +8,20 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
-public class WordCount {
+public class WordCount2 {
+    private static Logger log = Logger.getLogger(WordCount2.class);
+
     public static class WcMapper extends Mapper<LongWritable, Text, Text, LongWritable> {
         @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-            String[] words = value.toString().split("\\s+");
-            for(String word : words) {
-                context.write(new Text(word), new LongWritable(1));
+            char[] characters = value.toString().toCharArray();
+
+            for(char c : characters) {
+                context.write(new Text(String.valueOf(c)), new LongWritable(1));
             }
         }
     }
@@ -45,7 +49,8 @@ public class WordCount {
         job.setCombinerClass(WcReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(LongWritable.class);
-        job.setJarByClass(WordCount.class);
+        job.setJarByClass(WordCount2.class);
+        job.setJobName("dsfadfasfds");
         job.setNumReduceTasks(1);
 
         FileInputFormat.addInputPath(job, new Path(input));
