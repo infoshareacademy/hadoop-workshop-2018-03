@@ -30,7 +30,7 @@
 Wrzucenie i uruchomienie udfa:
 \begin{lstlisting}
 add jar hdfs:///user/vagrant/hive-udfs-1.0-SNAPSHOT.jar;
-create function hello AS 'pl.isa.hadoop.HelloWorldUdf';
+create temporary function hello AS "pl.isa.hadoop.HelloWorldUdf";
 select hello(src) from transfers limit 10;
 \end{lstlisting}
 
