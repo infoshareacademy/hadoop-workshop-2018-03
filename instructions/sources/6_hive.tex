@@ -26,8 +26,8 @@ https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML
 Połączenie beeline:
 \begin{lstlisting}
 !connect jdbc:hive2://<host>:<port>/<baza> <user> <haslo>
-!connect jdbc:hive2://vm-cluster-node1:10000 vagrant vagrant
-!connect jdbc:hive2://vm-cluster-node1:10000/xyz vagrant vagrant
+!connect jdbc:hive2://<adminsk02...>:10000 jpodeszwik jpodeszwik
+!connect jdbc:hive2://<adminsk02...>:10000/xyz jpodeszwik jpodeszwik
 \end{lstlisting}
 
 Utworzenie bazy
@@ -49,10 +49,10 @@ CREATE TABLE transfers(
 		date STRING
 	)
 	ROW FORMAT DELIMITED
-	FIELDS TERMINATED BY ','
+	FIELDS TERMINATED BY ","
 	STORED AS TEXTFILE;
 
-LOAD DATA INPATH '/user/vagrant/transfers' INTO TABLE transfers;
+LOAD DATA INPATH "/user/vagrant/transfers" INTO TABLE transfers;
 \end{lstlisting}
 
 Utworzenie tabeli w konkretnej lokalizacji (która może już istnieć):
@@ -64,9 +64,9 @@ CREATE TABLE transfers2(
 		date STRING
 	)
 	ROW FORMAT DELIMITED
-	FIELDS TERMINATED BY ','
+	FIELDS TERMINATED BY ","
 	STORED AS TEXTFILE
-	LOCATION '/user/xyz/transfers_table';
+	LOCATION "/user/xyz/transfers_table";
 \end{lstlisting}
 
 Utworzenie tabeli external:
@@ -78,7 +78,7 @@ Zmiana delimitera:
 \begin{lstlisting}
 create table transfers4
 row format delimited
-fields terminated by ';'
+fields terminated by ";"
 as select * from transfers;
 \end{lstlisting}
 
@@ -102,6 +102,27 @@ Odblokowanie dynamicznego wyznaczania partycji:
 SET hive.exec.dynamic.partition=true;
 \end{lstlisting}
 
+\pagebreak
+
+Odświeżenie danych o partycjach:
+\begin{lstlisting}
+MSCK REPAIR TABLE <tabela>;
+\end{lstlisting}
+
+\begin{lstlisting}
+CREATE TABLE transfers5(
+		src STRING,
+		dst STRING,
+		amount INT,
+		date STRING
+	)
+	partitioned by (log_time string)
+	ROW FORMAT DELIMITED
+	FIELDS TERMINATED BY ","
+	STORED AS TEXTFILE
+	LOCATION "/user/xyz/events";
+\end{lstlisting}
+
 Wyświetlenie danych na temat tabeli:
 \begin{lstlisting}
 show create table transfers;
@@ -110,16 +131,17 @@ show create table transfers;
 \subsection*{Zadania}
 
 \begin{enumerate}
+\item Zaloguj się na hue. Utwórz sobie użytkownika '<login>' i korzystaj z niego w dalszych poleceniach.
 \item Utwórz bazę <login> i używaj jej przy dalszych poleceniach.
 \item Utwórz tabelę transfers. Wrzuć do niej dane z pliku transfers.
-\item Utwórz tabelę typu ‘external’ I załaduj do niej takie same dane.
+\item Utwórz tabelę typu ‘external’ i załaduj do niej takie same dane.
 \item Zdropuj obie tabele i zobacz co stało się z danymi na hdfsie.
 \item Utwórz tabelę w formacie ORC. Spróbuj poleceniem ‘hdfs dfs -cat ...’ wypisać zawartość plików i zobacz, że są binarne.
 \item Posumuj pole 'amount' po koncie źródłowym.
 \item Utwórz tabelę 'owners' z logów załadowanych sqoopem
-\item Utwórz tabelę 'named\_transfers' będącą wynikiem zjoinowania tabel 'owners' i 'transfers', tzn zamiast src i dst będzie zawierać pola from i to w których beda imiona.
+\item Utwórz tabelę 'named\_transfers' będącą wynikiem zjoinowania tabel 'owners' i 'transfers', tzn zamiast src i dst będzie zawierać pola from i to w których będą imiona.
 \item Utwórz tabelę partycjonowaną po id konta źródłowego.
-\item Utwórz tabelę partycjonowaną po dacie z katalogów, które wrzucił Flume.
+\item Utwórz tabelę partycjonowaną po log\_time z katalogów, które wrzucił Flume.
 \end{enumerate}
 
 \end{document}
