@@ -1,0 +1,1 @@
+hadoop jar /opt/cloudera/parcels/CDH/jars/hadoop-streaming-2.6.0-cdh5.14.0.jar -D 'mapred.output.key.comparator.class=org.apache.hadoop.io.IntWritable$Comparator' -D mapred.reduce.tasks=1 -files mapper2.py -mapper mapper2.py -reducer /bin/cat -input /user/jpodeszwik/streaming-char-count2 -output /user/jpodeszwik/streaming-char-sort4
